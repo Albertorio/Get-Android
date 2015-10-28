@@ -7,12 +7,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.parse.Parse;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+
 public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Enable Local Datastore.
+        Parse.enableLocalDatastore(this);
+
+        Parse.initialize(this, "T4mKLSOGaa3dLavmKuvMlLvuXClmAdHxj295mOzc", "6KjuRBv415crv76Go4vqQyUD9Nt7pbCBS5CrLvQB");
+
+//        ParseObject testObject = new ParseObject("TestObject");
+//        testObject.put("foo", "bar");
+//        testObject.saveInBackground();
+
+
     }
 
     @Override
@@ -40,12 +54,10 @@ public class MainActivity extends ActionBarActivity {
     public void signup(View view) {
         Intent intent = new Intent(this, SignUp.class);
         startActivity(intent);
-        finish();
     }
 
     public void login(View view) {
         Intent intent = new Intent(this, LogIn.class);
         startActivity(intent);
-        finish();
     }
 }

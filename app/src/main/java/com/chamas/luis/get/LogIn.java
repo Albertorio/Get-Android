@@ -2,8 +2,14 @@ package com.chamas.luis.get;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 public class LogIn extends ActionBarActivity {
     EditText EmailOrUsername, Password;
@@ -19,8 +25,22 @@ public class LogIn extends ActionBarActivity {
         Password = (EditText)findViewById(R.id.SignInPasswordEditText);
         ForgotPass = (TextView)findViewById(R.id.SignInForgotPasswordTextView);
 
-        emailOrUserStr = EmailOrUsername.getText().toString();
-        passStr = Password.getText().toString();
+
     }
 
+    public void finishLogIn(View view) {
+        emailOrUserStr = EmailOrUsername.getText().toString();
+        passStr = Password.getText().toString();
+
+        ParseUser.logInInBackground(emailOrUserStr, passStr, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if(user != null){
+                    Toast.makeText(LogIn.this, "log in successful", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(LogIn.this, "log in failed", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
 }
