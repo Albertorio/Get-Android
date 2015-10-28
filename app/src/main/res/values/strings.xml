@@ -18,4 +18,6 @@
     <string name="title_activity_log_in">LogIn</string>
     <string name="title_activity_sign_up">SignUp</string>
     <string name="title_activity_set_up_profile">SetUpProfile</string>
+    <string name="title_activity_event_list">EventList</string>
+    <string name="title_activity_splash">Splash</string>
 </resources>

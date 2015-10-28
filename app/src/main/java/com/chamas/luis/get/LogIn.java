@@ -1,5 +1,6 @@
 package com.chamas.luis.get;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -24,8 +25,6 @@ public class LogIn extends ActionBarActivity {
         EmailOrUsername = (EditText)findViewById(R.id.SignInEmailOrUsernameEditText);
         Password = (EditText)findViewById(R.id.SignInPasswordEditText);
         ForgotPass = (TextView)findViewById(R.id.SignInForgotPasswordTextView);
-
-
     }
 
     public void finishLogIn(View view) {
@@ -37,6 +36,9 @@ public class LogIn extends ActionBarActivity {
             public void done(ParseUser user, ParseException e) {
                 if(user != null){
                     Toast.makeText(LogIn.this, "log in successful", Toast.LENGTH_LONG).show();
+                    Intent eventlist = new Intent(LogIn.this, EventList.class);
+                    LogIn.this.startActivity(eventlist);
+                    LogIn.this.finish();
                 }else{
                     Toast.makeText(LogIn.this, "log in failed", Toast.LENGTH_LONG).show();
                 }
