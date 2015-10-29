@@ -28,6 +28,7 @@
         android:ems="10"
         android:hint="password"
         android:textAlignment="center"
+        android:inputType="textPassword"
         android:layout_below="@+id/SignInEmailOrUsernameEditText"
         android:layout_centerHorizontal="true" />
 
@@ -51,6 +52,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="46dp"
         android:onClick="finishLogIn"/>
+
 
 
 </RelativeLayout>

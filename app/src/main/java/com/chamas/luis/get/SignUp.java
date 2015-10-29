@@ -1,5 +1,7 @@
 package com.chamas.luis.get;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -41,11 +43,18 @@ public class SignUp extends ActionBarActivity {
         user.setPassword(passwordStr);
         user.setEmail(emailStr);
 
+        ProgressDialog progressDialog = new ProgressDialog(SignUp.this);
+        progressDialog.setMessage("Signing up");
+        progressDialog.show();
+
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
                 if(e == null){
                     Toast.makeText(SignUp.this, "sign up successful",Toast.LENGTH_LONG).show();
+                    Intent setupProfile = new Intent(SignUp.this, SetUpProfile.class);
+                    SignUp.this.startActivity(setupProfile);
+                    SignUp.this.finish();
                 }else{
                     Toast.makeText(SignUp.this, "failed", Toast.LENGTH_LONG).show();
                     Log.d("parse error", e.toString());

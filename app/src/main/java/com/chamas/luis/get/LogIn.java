@@ -1,5 +1,6 @@
 package com.chamas.luis.get;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -31,14 +32,20 @@ public class LogIn extends ActionBarActivity {
         emailOrUserStr = EmailOrUsername.getText().toString();
         passStr = Password.getText().toString();
 
+        ProgressDialog progressDialog = new ProgressDialog(LogIn.this);
+        progressDialog.setMessage("Logging in");
+        progressDialog.show();
+
         ParseUser.logInInBackground(emailOrUserStr, passStr, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
+
                 if(user != null){
                     Toast.makeText(LogIn.this, "log in successful", Toast.LENGTH_LONG).show();
                     Intent eventlist = new Intent(LogIn.this, EventList.class);
                     LogIn.this.startActivity(eventlist);
                     LogIn.this.finish();
+
                 }else{
                     Toast.makeText(LogIn.this, "log in failed", Toast.LENGTH_LONG).show();
                 }

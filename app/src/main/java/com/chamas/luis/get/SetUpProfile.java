@@ -2,6 +2,7 @@ package com.chamas.luis.get;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
 
 public class SetUpProfile extends ActionBarActivity {
 
@@ -11,4 +12,7 @@ public class SetUpProfile extends ActionBarActivity {
         setContentView(R.layout.activity_set_up_profile);
     }
 
+    public void changeProfilePic(View view) {
+
+    }
 }
