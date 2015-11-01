@@ -43,7 +43,8 @@ public class SignUp extends ActionBarActivity {
         user.setPassword(passwordStr);
         user.setEmail(emailStr);
 
-        ProgressDialog progressDialog = new ProgressDialog(SignUp.this);
+
+        final ProgressDialog progressDialog = new ProgressDialog(SignUp.this);
         progressDialog.setMessage("Signing up");
         progressDialog.show();
 
@@ -58,6 +59,7 @@ public class SignUp extends ActionBarActivity {
                 }else{
                     Toast.makeText(SignUp.this, "failed", Toast.LENGTH_LONG).show();
                     Log.d("parse error", e.toString());
+                    progressDialog.dismiss();
                 }
             }
         });

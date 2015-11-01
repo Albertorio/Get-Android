@@ -44,6 +44,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SelectRegion"
+            android:label="@string/title_activity_select_region" >
+        </activity>
     </application>
 
 </manifest>

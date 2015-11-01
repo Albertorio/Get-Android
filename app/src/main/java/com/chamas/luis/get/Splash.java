@@ -19,6 +19,9 @@ public class Splash extends ActionBarActivity {
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "T4mKLSOGaa3dLavmKuvMlLvuXClmAdHxj295mOzc", "6KjuRBv415crv76Go4vqQyUD9Nt7pbCBS5CrLvQB");
 
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
