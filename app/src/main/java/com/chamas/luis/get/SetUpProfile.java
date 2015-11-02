@@ -2,50 +2,94 @@ package com.chamas.luis.get;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import java.io.ByteArrayOutputStream;
 
 public class SetUpProfile extends ActionBarActivity {
     private Spinner sexSelect;
     private EditText name, age, bio;
     private String usernameFromParse;
     private TextView UserName;
+    private ImageButton profilePic;
     ParseUser parseUser = ParseUser.getCurrentUser();
-
+    Bitmap photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_up_profile);
+
         sexSelect = (Spinner)findViewById(R.id.GenderSetUpSpinner);
         name = (EditText)findViewById(R.id.NameSetUpEditText);
         UserName = (TextView)findViewById(R.id.UsernameSetUpTextView);
         age = (EditText)findViewById(R.id.AgeSetUpEditText);
         bio = (EditText)findViewById(R.id.BioSetUpEditText);
-
+        profilePic = (ImageButton)findViewById(R.id.SetUpProfileImageButton);
+        registerForContextMenu(profilePic);
+        
         String[] items = new String[]{"Male", "Female"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
         sexSelect.setAdapter(adapter);
 
-        usernameFromParse = "<u>" + parseUser.getUsername().toString() + "</u>";
         UserName.setText(parseUser.getUsername().toString());
 
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater menuInflater = this.getMenuInflater();
+        menuInflater.inflate(R.menu.contextual_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+            switch (item.getItemId()) {
+                case R.id.title_take_photo:
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, 0);
+
+                case R.id.title_choose_existing:
+            }
+
+        return super.onContextItemSelected(item);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == 0){
+            photo = (Bitmap)data.getExtras().get("data");
+            profilePic.setImageBitmap(photo);
+
+        }
+    }
+
     public void changeProfilePic(View view) {
 
-
+        this.openContextMenu(view);
     }
 
     public void finishSetUp(View view) throws ParseException {
@@ -57,6 +101,13 @@ public class SetUpProfile extends ActionBarActivity {
         parseUser.put("Sex", sexSelect.getSelectedItem().toString());
         parseUser.put("Bio", bio.getText().toString());
         parseUser.put("Age", Integer.parseInt(age.getText().toString()));
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        ParseFile file = new ParseFile("profile.png", byteArray);
+
+        parseUser.put("Picture", file);
         parseUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -67,11 +118,10 @@ public class SetUpProfile extends ActionBarActivity {
                     SetUpProfile.this.finish();
                 } else {
                     Toast.makeText(SetUpProfile.this, "setup failed", Toast.LENGTH_LONG).show();
+                    Log.d("DEBUG", "PARSE EXCEPTION: " + e.toString());
                     progressDialog.dismiss();
                 }
             }
         });
-
-
     }
 }
