@@ -3,6 +3,8 @@ package com.chamas.luis.get;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
@@ -26,6 +28,8 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class SetUpProfile extends ActionBarActivity {
     private Spinner sexSelect;
@@ -35,6 +39,7 @@ public class SetUpProfile extends ActionBarActivity {
     private ImageButton profilePic;
     ParseUser parseUser = ParseUser.getCurrentUser();
     Bitmap photo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +53,7 @@ public class SetUpProfile extends ActionBarActivity {
         bio = (EditText)findViewById(R.id.BioSetUpEditText);
         profilePic = (ImageButton)findViewById(R.id.SetUpProfileImageButton);
         registerForContextMenu(profilePic);
-        
+
         String[] items = new String[]{"Male", "Female"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
         sexSelect.setAdapter(adapter);
@@ -72,8 +77,14 @@ public class SetUpProfile extends ActionBarActivity {
                 case R.id.title_take_photo:
                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(cameraIntent, 0);
+                    return true;
 
                 case R.id.title_choose_existing:
+                    Intent pickPhoto = new Intent(Intent.ACTION_GET_CONTENT);
+                    pickPhoto.setType("image/*");
+                    startActivityForResult(pickPhoto, 1);
+                    return true;
+
             }
 
         return super.onContextItemSelected(item);
@@ -83,7 +94,17 @@ public class SetUpProfile extends ActionBarActivity {
         if(requestCode == 0){
             photo = (Bitmap)data.getExtras().get("data");
             profilePic.setImageBitmap(photo);
+        }
 
+        if(requestCode == 1){
+            Uri selectedImage = data.getData();
+            try {
+                InputStream imageStream = getContentResolver().openInputStream(selectedImage);
+                photo =  BitmapFactory.decodeStream(imageStream);
+                profilePic.setImageBitmap(photo);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 
