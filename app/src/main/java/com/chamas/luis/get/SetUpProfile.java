@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -38,7 +39,7 @@ public class SetUpProfile extends ActionBarActivity {
     private TextView UserName;
     private ImageButton profilePic;
     ParseUser parseUser = ParseUser.getCurrentUser();
-    Bitmap photo;
+    Bitmap photo = null;
 
 
     @Override
@@ -109,7 +110,6 @@ public class SetUpProfile extends ActionBarActivity {
     }
 
     public void changeProfilePic(View view) {
-
         this.openContextMenu(view);
     }
 
@@ -123,12 +123,20 @@ public class SetUpProfile extends ActionBarActivity {
         parseUser.put("Bio", bio.getText().toString());
         parseUser.put("Age", Integer.parseInt(age.getText().toString()));
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-        ParseFile file = new ParseFile("profile.png", byteArray);
-
-        parseUser.put("Picture", file);
+        if(photo == null){
+            photo = ((BitmapDrawable)profilePic.getDrawable()).getBitmap();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            ParseFile file = new ParseFile("profile.png", byteArray);
+            parseUser.put("Picture", file);
+        }else {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            ParseFile file = new ParseFile("profile.png", byteArray);
+            parseUser.put("Picture", file);
+        }
         parseUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
