@@ -32,7 +32,7 @@ public class LogIn extends ActionBarActivity {
         emailOrUserStr = EmailOrUsername.getText().toString();
         passStr = Password.getText().toString();
 
-        ProgressDialog progressDialog = new ProgressDialog(LogIn.this);
+        final ProgressDialog progressDialog = new ProgressDialog(LogIn.this);
         progressDialog.setMessage("Logging in");
         progressDialog.show();
 
@@ -48,6 +48,7 @@ public class LogIn extends ActionBarActivity {
 
                 }else{
                     Toast.makeText(LogIn.this, "log in failed", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
                 }
             }
         });
