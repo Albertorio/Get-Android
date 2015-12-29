@@ -7,7 +7,6 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     tools:context="com.chamas.luis.get.LogIn"
-    style="@style/loginTheme"
     android:gravity="center">
 
 
